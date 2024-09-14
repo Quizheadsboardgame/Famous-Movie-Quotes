@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Quotes Quiz</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Baloo 2', sans-serif;
+            background-color: #38B6FF; /* Background color */
+            color: black;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        #yellow-box {
+            width: 300px;
+            height: 300px;
+            background-color: #FED405; /* Yellow color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+            border: 5px solid black; /* Black edging */
+            transition: transform 0.1s ease-in-out;
+        }
+
+        #question-answer {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Keyframes for the bounce animation */
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Class to trigger the bounce animation */
+        .animate-bounce {
+            animation: bounce 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="yellow-box">MOVIE QUOTES</div>
+
+    <div id="question-answer"></div>
+
+    <script>
+        const yellowBox = document.getElementById("yellow-box");
+        const questionAnswerDiv = document.getElementById("question-answer");
+
+        // Array of questions and answers about movie quotes
+        const movieQuotes = [
+            { question: "Which movie features the quote 'Here's looking at you, kid'?", answer: "Casablanca" },
+            { question: "In which movie does the character say, 'May the Force be with you'?", answer: "Star Wars" },
+            { question: "Which film contains the line, 'I'll be back'?", answer: "The Terminator" },
+            { question: "What movie is known for the quote 'Houston, we have a problem'?", answer: "Apollo 13" },
+            { question: "In which movie does the line 'You can't handle the truth' appear?", answer: "A Few Good Men" },
+            { question: "What film features the quote 'I'm the king of the world!'?", answer: "Titanic" },
+            { question: "Which movie has the famous line 'There's no place like home'?", answer: "The Wizard of Oz" },
+            { question: "What movie includes the quote 'To infinity and beyond'?", answer: "Toy Story" },
+            { question: "In which film does the line 'I'll have what she's having' appear?", answer: "When Harry Met Sally" },
+            { question: "What film is known for the quote 'Here's Johnny!'?", answer: "The Shining" },
+            { question: "Which movie features the line 'Nobody puts Baby in a corner'?", answer: "Dirty Dancing" },
+            { question: "In which movie does the character say, 'Life is like a box of chocolates'?", answer: "Forrest Gump" },
+            { question: "What film contains the quote 'You talking to me?'?", answer: "Taxi Driver" },
+            { question: "Which movie has the line 'I see dead people'?", answer: "The Sixth Sense" },
+            { question: "What film features the quote 'I feel the need - the need for speed'?", answer: "Top Gun" },
+            { question: "In which film does the line 'You’re gonna need a bigger boat' appear?", answer: "Jaws" },
+            { question: "Which movie includes the quote 'I am your father'?", answer: "Star Wars: The Empire Strikes Back" },
+            { question: "What film contains the line 'Carpe diem. Seize the day, boys'?", answer: "Dead Poets Society" },
+            { question: "In which movie does the quote 'Here's looking at you, kid' appear?", answer: "Casablanca" },
+            { question: "Which movie has the famous line 'I coulda been a contender'?", answer: "On the Waterfront" },
+            { question: "What film features the quote 'There's no place like home'?", answer: "The Wizard of Oz" },
+            { question: "In which movie does the line 'You had me at hello' appear?", answer: "Jerry Maguire" },
+            { question: "Which film contains the quote 'I'm going to make him an offer he can't refuse'?", answer: "The Godfather" },
+            { question: "What movie has the line 'The stuff that dreams are made of'?", answer: "The Maltese Falcon" },
+            { question: "In which film does the character say 'Frankly, my dear, I don't give a damn'?", answer: "Gone with the Wind" },
+            { question: "What film features the line 'E.T. phone home'?", answer: "E.T. the Extra-Terrestrial" },
+            { question: "Which movie has the famous line 'I’m as mad as hell, and I’m not going to take this anymore!'?", answer: "Network" },
+            { question: "In which film does the quote 'You’re gonna need a bigger boat' appear?", answer: "Jaws" },
+            { question: "What movie contains the line 'I want to be alone'?", answer: "Grand Hotel" },
+            { question: "Which film features the quote 'I’m the king of the world!'?", answer: "Titanic" },
+            { question: "In which movie does the line 'You talking to me?' appear?", answer: "Taxi Driver" },
+            { question: "What film includes the quote 'I'm the king of the world!'?", answer: "Titanic" },
+            { question: "Which movie contains the line 'I’m your Huckleberry'?", answer: "Tombstone" },
+            { question: "What film features the quote 'You had me at hello'?", answer: "Jerry Maguire" },
+            { question: "In which movie does the line 'I see dead people' appear?", answer: "The Sixth Sense" },
+            { question: "Which film contains the quote 'Life is like a box of chocolates'?", answer: "Forrest Gump" },
+            { question: "What movie features the line 'You talking to me?'?", answer: "Taxi Driver" },
+            { question: "In which film does the line 'You can’t handle the truth' appear?", answer: "A Few Good Men" },
+            { question: "Which movie contains the quote 'I am your father'?", answer: "Star Wars: The Empire Strikes Back" },
+            { question: "What film features the line 'You’re gonna need a bigger boat'?", answer: "Jaws" },
+            { question: "In which movie does the line 'I’m the king of the world!' appear?", answer: "Titanic" },
+            { question: "What film contains the quote 'You had me at hello'?", answer: "Jerry Maguire" },
+            { question: "Which movie features the quote 'To infinity and beyond'?", answer: "Toy Story" },
+            { question: "In which film does the line 'I see dead people' appear?", answer: "The Sixth Sense" },
+            { question: "What movie includes the quote 'I’ll be back'?", answer: "The Terminator" },
+            { question: "Which film features the line 'Nobody puts Baby in a corner'?", answer: "Dirty Dancing" },
+            { question: "In which movie does the line 'I want to be alone' appear?", answer: "Grand Hotel" },
+            { question: "What film contains the quote 'Here’s looking at you, kid'?", answer: "Casablanca" },
+            { question: "Which movie features the quote 'May the Force be with you'?", answer: "Star Wars" },
+            { question: "In which film does the line 'I’m your Huckleberry' appear?", answer: "Tombstone" },
+            { question: "What film contains the quote 'There’s no place like home'?", answer: "The Wizard of Oz" },
+            { question: "Which movie features the quote 'I’m the king of the world!'?", answer: "Titanic" },
+            { question: "In which film does the line 'You can’t handle the truth' appear?", answer: "A Few Good Men" },
+            { question: "What film includes the quote 'Here’s Johnny!'?", answer: "The Shining" },
+            { question: "Which movie features the quote 'I feel the need - the need for speed'?", answer: "Top Gun" },
+            { question: "In which film does the line 'Houston, we have a problem' appear?", answer: "Apollo 13" },
+            { question: "What film features the quote 'Here’s looking at you, kid'?", answer: "Casablanca" },
+            { question: "Which movie contains the quote 'You talking to me?'?", answer: "Taxi Driver" },
+            { question: "In which film does the line 'Life is like a box of chocolates' appear?", answer: "Forrest Gump" },
+            { question: "What film contains the quote 'I see dead people'?", answer: "The Sixth Sense" },
+            { question: "Which movie features the line 'I am your father'?", answer: "Star Wars: The Empire Strikes Back" },
+            { question: "In which film does the quote 'E.T. phone home' appear?", answer: "E.T. the Extra-Terrestrial" },
+            { question: "What film includes the quote 'You’re gonna need a bigger boat'?", answer: "Jaws" },
+            { question: "Which movie contains the quote 'I’m as mad as hell, and I’m not going to take this anymore!'?", answer: "Network" },
+            { question: "In which film does the line 'You talking to me?' appear?", answer: "Taxi Driver" },
+            { question: "What film features the quote 'I coulda been a contender'?", answer: "On the Waterfront" },
+            { question: "Which movie contains the line 'I’m your Huckleberry'?", answer: "Tombstone" },
+            { question: "In which film does the line 'You had me at hello' appear?", answer: "Jerry Maguire" },
+            { question: "What film features the quote 'I want to be alone'?", answer: "Grand Hotel" },
+            { question: "Which movie contains the quote 'There’s no place like home'?", answer: "The Wizard of Oz" },
+            { question: "In which film does the line 'May the Force be with you' appear?", answer: "Star Wars" },
+            { question: "What film features the quote 'You talking to me?'?", answer: "Taxi Driver" },
+            { question: "Which movie contains the quote 'I am your father'?", answer: "Star Wars: The Empire Strikes Back" },
+            { question: "In which film does the line 'I feel the need - the need for speed' appear?", answer: "Top Gun" },
+            { question: "What film features the quote 'E.T. phone home'?", answer: "E.T. the Extra-Terrestrial" },
+            { question: "Which movie contains the quote 'Here’s looking at you, kid'?", answer: "Casablanca" },
+            { question: "In which film does the line 'Houston, we have a problem' appear?", answer: "Apollo 13" },
+            { question: "What film includes the quote 'I’m your Huckleberry'?", answer: "Tombstone" },
+            { question: "Which movie contains the line 'Life is like a box of chocolates'?", answer: "Forrest Gump" },
+            { question: "In which film does the quote 'I want to be alone' appear?", answer: "Grand Hotel" },
+            { question: "What film features the line 'To infinity and beyond'?", answer: "Toy Story" }
+        ];
+
+        let shuffledQuestions = [];
+        let questionIndex = 0;
+
+        // Shuffle the questions array
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize questions
+        function initializeQuestions() {
+            shuffledQuestions = shuffleArray([...movieQuotes]);
+            questionIndex = 0;
+            displayQuestion();
+        }
+
+        // Function to display the current question
+        function displayQuestion() {
+            if (shuffledQuestions.length === 0) {
+                questionAnswerDiv.innerHTML = "<strong>No more questions!</strong>";
+                return;
+            }
+            const currentQA = shuffledQuestions[questionIndex];
+            questionAnswerDiv.innerHTML = `<strong>Question:</strong> ${currentQA.question}<br><strong>Answer:</strong> ${currentQA.answer}`;
+        }
+
+        // Bounce animation on click
+        yellowBox.addEventListener("click", () => {
+            yellowBox.classList.add("animate-bounce");
+            setTimeout(() => yellowBox.classList.remove("animate-bounce"), 300);
+            
+            questionIndex++;
+            if (questionIndex >= shuffledQuestions.length) {
+                questionIndex = 0; // Reset to first question if out of questions
+            }
+            displayQuestion();
+        });
+
+        // Initialize the quiz
+        initializeQuestions();
+    </script>
+
+</body>
+</html>
